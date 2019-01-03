@@ -62,6 +62,35 @@ func handleMessage(client mqtt.Client, msg mqtt.Message) {
 	}
 }
 
+type LoggingResponseWriter struct {
+	TotalBytes int
+	RW         http.ResponseWriter
+}
+
+func NewLoggingResponseWriter(w http.ResponseWriter) *LoggingResponseWriter {
+	return &LoggingResponseWriter{
+		RW: w,
+	}
+}
+
+func (lrw *LoggingResponseWriter) Header() http.Header {
+	return lrw.RW.Header()
+}
+
+func (lrw *LoggingResponseWriter) Write(bites []byte) (int, error) {
+	n, err := lrw.RW.Write(bites)
+	if err != nil {
+		return n, err
+	}
+	lrw.TotalBytes += n
+	log.Printf("Wrote %d bytes", lrw.TotalBytes)
+	return n, err
+}
+
+func (lrw *LoggingResponseWriter) WriteHeader(statusCode int) {
+	lrw.RW.WriteHeader(statusCode)
+}
+
 func main() {
 	flag.Parse()
 
@@ -73,7 +102,9 @@ func main() {
 
 	// Start web server
 	http.HandleFunc("/"+*binPath, func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, *binPath)
+		log.Printf("%s %s %s", r.RemoteAddr, r.Method, "/"+*binPath)
+		http.ServeFile(NewLoggingResponseWriter(w), r, *binPath)
+		log.Printf("Complete")
 	})
 	go func() {
 		panic(http.ListenAndServe(serverAddr, nil))
