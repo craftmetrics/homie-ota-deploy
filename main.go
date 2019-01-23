@@ -15,7 +15,7 @@ import (
 var listen = flag.String("listen", ":8081", "ip:port for http server to listen on")
 var binPath = flag.String("bin", "", "path to build product")
 var mqttDeviceTopic = flag.String("device", "homie/mydevice", "MQTT topic for device")
-var mqttBroker = flag.String("broker", "tcp://data.craftmetrics.ca:1883", "MQTT broker URI")
+var mqttBroker = flag.String("broker", "tcp://data.example.ca:1883", "MQTT broker URI")
 var mqttUsername = flag.String("username", "test", "MQTT username")
 var mqttPassword = flag.String("password", "test", "MQTT password")
 
