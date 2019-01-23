@@ -4,7 +4,7 @@ This is a tool to upload firmware to a device running esp32-homie
 
 ## Install
 
-`go get go get github.com/craftmetrics/homie-ota-deploy`
+`go get github.com/craftmetrics/homie-ota-deploy`
 
 ## Usage
 
