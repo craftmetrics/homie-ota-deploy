@@ -1,4 +1,4 @@
-### homie-ota-deploy
+# homie-ota-deploy
 
 This is a tool to upload firmware to a device running esp32-homie
 
